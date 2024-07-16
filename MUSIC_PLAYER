@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+
+        .music-player {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .player-info {
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .controls button {
+            background: none;
+            border: none;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .controls button img {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="music-player">
+        <div class="player-info">
+            <h2 id="song-title">Song Title</h2>
+            <p id="artist-name">Artist Name</p>
+        </div>
+        <audio id="audio" src="music/song1.mp3"></audio>
+        <div class="controls">
+            <button id="prev" onclick="prevSong()"><img src="images/prev.png" alt="Previous"></button>
+            <button id="play-pause" onclick="togglePlayPause()"><img src="images/play.png" alt="Play" id="play-pause-icon"></button>
+            <button id="next" onclick="nextSong()"><img src="images/next.png" alt="Next"></button>
+        </div>
+    </div>
+    <script>
+        const songs = [
+            {
+                title: 'Song 1',
+                artist: 'Artist 1',
+                src: 'music/song1.mp3'
+            },
+            {
+                title: 'Song 2',
+                artist: 'Artist 2',
+                src: 'music/song2.mp3'
+            },
+            // Add more songs as needed
+        ];
+
+        let currentSongIndex = 0;
+        const audio = document.getElementById('audio');
+        const songTitle = document.getElementById('song-title');
+        const artistName = document.getElementById('artist-name');
+        const playPauseIcon = document.getElementById('play-pause-icon');
+
+        function loadSong(song) {
+            audio.src = song.src;
+            songTitle.textContent = song.title;
+            artistName.textContent = song.artist;
+        }
+
+        function playSong() {
+            audio.play();
+            playPauseIcon.src = 'images/pause.png';
+        }
+
+        function pauseSong() {
+            audio.pause();
+            playPauseIcon.src = 'images/play.png';
+        }
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                playSong();
+            } else {
+                pauseSong();
+            }
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(songs[currentSongIndex]);
+            playSong();
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(songs[currentSongIndex]);
+            playSong();
+        }
+
+        // Load the first song initially
+        loadSong(songs[currentSongIndex]);
+
+        // Optional: Automatically play the next song when the current one ends
+        audio.addEventListener('ended', nextSong);
+    </script>
+</body>
+</html>
